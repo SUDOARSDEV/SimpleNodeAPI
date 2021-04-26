@@ -8,8 +8,15 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+
+    const result = {
+        Name: req.body.Name,
+        Price: req.body.Price
+    }
+      
     res.status(201).json({
-        message: 'POST API Call'    
+        message: 'POST API Call',
+        body:result    
     });
 });
 
