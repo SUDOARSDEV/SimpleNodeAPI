@@ -4,6 +4,7 @@ const cors = require('cors');
 
 const app = express();
 const CoursesRoutes = require('./api/routes/courses');
+const InstructorRoutes = require('./api/routes/instructor');
 
 
 app.use(morgan('dev'));
@@ -23,7 +24,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/courses', CoursesRoutes);
-
+app.use('/instructor', InstructorRoutes);
 
 
 app.use((req, res, next) => {

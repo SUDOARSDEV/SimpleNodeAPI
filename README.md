@@ -16,3 +16,4 @@ $ npm install --save body-parser
 * Routes and API Calls (get post patch delete) 
 * Handling Errors & Improving the Project Setup (use of morgan and nodemon package)
 * Body Parser & CORS
+* Add More Routes
