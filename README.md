@@ -8,6 +8,7 @@ $ npm install --save express
 $ npm install --save-dev nodemon
 $ npm install --save morgan
 $ npm install --save body-parser
+$ npm install --save mongoose
 ```
 
 ### Project Baseline:
@@ -17,3 +18,4 @@ $ npm install --save body-parser
 * Handling Errors & Improving the Project Setup (use of morgan and nodemon package)
 * Body Parser & CORS
 * Add More Routes
+* Integration MongoDB and Mongoose
