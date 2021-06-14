@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
+const Course = require('../models/Course');
+
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -8,16 +11,18 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-
-    const result = {
+    const course = new Course({
+        _id: new mongoose.Types.ObjectId(),
         Name: req.body.Name,
         Price: req.body.Price
-    }
-      
-    res.status(201).json({
-        message: 'POST API Call',
-        body:result    
     });
+    course.save().then(result => {
+        console.log(result);
+    }).catch(err => console.log(err));
+    res.status(201).json({
+        message: 'POST Call',
+        createdcourse: course
+    })
 });
 
 

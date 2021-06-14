@@ -1,11 +1,17 @@
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
 const CoursesRoutes = require('./api/routes/courses');
 const InstructorRoutes = require('./api/routes/instructor');
 
+mongoose.connect('mongodb+srv://Cluster0:'+ process.env.MONGO_ATLAS_PWD +'@cluster0.ixgql.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+});
 
 app.use(morgan('dev'));
 app.use(cors());
