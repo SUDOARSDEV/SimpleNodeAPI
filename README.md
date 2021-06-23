@@ -19,3 +19,7 @@ $ npm install --save mongoose
 * Body Parser & CORS
 * Add More Routes
 * Integration MongoDB and Mongoose
+* CRUD Operation (Create Read Update Delete)
+* Mongoose Validation
+* Managing Instructor with Mongoose
+* Populating Queries with Mongoose
