@@ -7,6 +7,7 @@ const Course = require('../models/Course');
 router.get('/', (req, res, next) => {
     Instructor.find()
         .select('Name CourseId _id')
+        .populate('CourseId','Name')
         .exec()
         .then(docs => {
             res.status(200).json({
@@ -75,6 +76,7 @@ router.post('/', (req, res, next) => {
 router.get('/:InstructorId', (req, res, next) => {
     const tid = req.params.InstructorId;
     Instructor.findById(tid)
+        .populate('CourseId','Name')
         .exec()
         .then((doc) => {
         console.log(doc);
