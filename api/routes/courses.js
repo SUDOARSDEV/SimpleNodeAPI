@@ -2,11 +2,32 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Course = require('../models/Course');
-
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb) {
+    cb(null, new Date().toISOString() + file.originalname)
+  } 
+})
+const fileFilter = (req, file, cb) => {
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+    cb(null,true);
+  } else {
+    cb(null,false);
+  } 
+  
+}
+const upload = multer({storage: storage, limits: {
+        fileSize: 1024 * 1024 * 5
+        },
+        fileFilter: fileFilter
+});
 
 router.get("/", (req, res, next) => {
     Course.find()
-      .select("Name Price _id")  
+      .select("Name Price _id courseImage")  
       .exec()
       .then((docs) => {
         const response = {
@@ -16,6 +37,7 @@ router.get("/", (req, res, next) => {
                     Name:doc.Name,
                     Price:doc.Price,
                     _id:doc._id,
+                    courseImage:doc.courseImage,
                     request: {
                         type: 'GET',
                         url: 'http://localhost:3000/courses/' + doc._id
@@ -34,11 +56,12 @@ router.get("/", (req, res, next) => {
       });
     });
 
-router.post("/", (req, res, next) => {
+router.post("/", upload.single('courseImage'), (req, res, next) => {
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         Name: req.body.Name,
-        Price: req.body.Price
+        Price: req.body.Price,
+        courseImage: req.file.path
     });
     course
         .save()
@@ -68,6 +91,7 @@ router.post("/", (req, res, next) => {
 router.get("/:CourseId", (req, res, next) => {
     const id = req.params.CourseId;
     Course.findById(id)
+        .select("Name Price _id courseImage")
         .exec()
         .then((doc) => {
         console.log(doc);

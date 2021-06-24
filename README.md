@@ -9,6 +9,7 @@ $ npm install --save-dev nodemon
 $ npm install --save morgan
 $ npm install --save body-parser
 $ npm install --save mongoose
+$ npm install --save multer
 ```
 
 ### Project Baseline:
@@ -23,3 +24,4 @@ $ npm install --save mongoose
 * Mongoose Validation
 * Managing Instructor with Mongoose
 * Populating Queries with Mongoose
+* Image Uploading
