@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const app = express();
 const CoursesRoutes = require('./api/routes/courses');
 const InstructorRoutes = require('./api/routes/instructor');
+const UserRoutes = require('./api/routes/users');
 
 mongoose.connect('mongodb+srv://Cluster0:'+ process.env.MONGO_ATLAS_PWD +'@cluster0.ixgql.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',{
     useNewUrlParser: true,
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 
 app.use('/courses', CoursesRoutes);
 app.use('/instructor', InstructorRoutes);
+app.use('/users', UserRoutes);
 
 
 app.use((req, res, next) => {
