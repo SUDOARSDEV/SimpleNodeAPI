@@ -1,5 +1,6 @@
 {
     "env" : {
-            "MONGO_ATLAS_PWD": "Cluster0"
+            "MONGO_ATLAS_PWD": "Cluster0",
+            "JWT_KEY": "MEAN"
     }
 }

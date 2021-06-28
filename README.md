@@ -10,6 +10,8 @@ $ npm install --save morgan
 $ npm install --save body-parser
 $ npm install --save mongoose
 $ npm install --save multer
+$ npm install --save bcrypt
+$ npm install --save jsonwebtoken  
 ```
 
 ### Project Baseline:
@@ -25,3 +27,5 @@ $ npm install --save multer
 * Managing Instructor with Mongoose
 * Populating Queries with Mongoose
 * Image Uploading
+* Adding User SignUp
+* Adding User Login With JWT Signing
