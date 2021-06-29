@@ -3,8 +3,9 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Instructor = require('../models/Instructor');
 const Course = require('../models/Course');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth,(req, res, next) => {
     Instructor.find()
         .select('Name CourseId _id')
         .populate('CourseId','Name')
@@ -32,7 +33,7 @@ router.get('/', (req, res, next) => {
         });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth,(req, res, next) => {
     Course.findById(req.body.CourseId)
     .then(teacher => {
         const instructor = new Instructor({
@@ -73,7 +74,7 @@ router.post('/', (req, res, next) => {
 });
 
 
-router.get('/:InstructorId', (req, res, next) => {
+router.get('/:InstructorId', checkAuth,(req, res, next) => {
     const tid = req.params.InstructorId;
     Instructor.findById(tid)
         .populate('CourseId','Name')
@@ -103,7 +104,7 @@ router.get('/:InstructorId', (req, res, next) => {
 });
 
 
-router.patch('/:InstructorId', (req, res, next) => {
+router.patch('/:InstructorId', checkAuth,(req, res, next) => {
     const id = req.params.InstructorId;
     const updateOps = {};
     for (const ops of req.body) {
@@ -129,7 +130,7 @@ router.patch('/:InstructorId', (req, res, next) => {
     });
 });
 
-router.delete('/:InstructorId', (req, res, next) => {
+router.delete('/:InstructorId', checkAuth,(req, res, next) => {
     Instructor.remove({_id: req.params.InstructorId})
     .exec()
     .then(result => {

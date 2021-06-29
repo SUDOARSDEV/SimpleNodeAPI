@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Course = require('../models/Course');
+const checkAuth = require('../middleware/check-auth');
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: function(req, file, cb){
@@ -25,7 +26,7 @@ const upload = multer({storage: storage, limits: {
         fileFilter: fileFilter
 });
 
-router.get("/", (req, res, next) => {
+router.get("/", checkAuth, (req, res, next) => {
     Course.find()
       .select("Name Price _id courseImage")  
       .exec()
@@ -56,7 +57,7 @@ router.get("/", (req, res, next) => {
       });
     });
 
-router.post("/", upload.single('courseImage'), (req, res, next) => {
+router.post("/", checkAuth, upload.single('courseImage'), (req, res, next) => {
     const course = new Course({
         _id: new mongoose.Types.ObjectId(),
         Name: req.body.Name,
@@ -88,7 +89,7 @@ router.post("/", upload.single('courseImage'), (req, res, next) => {
         });
     });
 
-router.get("/:CourseId", (req, res, next) => {
+router.get("/:CourseId", checkAuth,(req, res, next) => {
     const id = req.params.CourseId;
     Course.findById(id)
         .select("Name Price _id courseImage")
@@ -117,7 +118,7 @@ router.get("/:CourseId", (req, res, next) => {
         });
     });
     
-router.patch("/:CourseId", (req, res, next) => {
+router.patch("/:CourseId", checkAuth,(req, res, next) => {
     const id = req.params.CourseId;
     const updateOps = {};
     for (const ops of req.body) {
@@ -143,7 +144,7 @@ router.patch("/:CourseId", (req, res, next) => {
     });
     });
     
-router.delete("/:CourseId", (req, res, next) => {
+router.delete("/:CourseId", checkAuth,(req, res, next) => {
     const id = req.params.CourseId;
     Course.remove({ _id: id })
         .exec()
