@@ -8,16 +8,13 @@ exports.courses_get_all = (req, res, next) => {
       .then((docs) => {
         const response = {
             count:docs.length,
+            status: true,
             courses: docs.map(doc => {
                 return {
                     Name:doc.Name,
                     Price:doc.Price,
                     _id:doc._id,
-                    courseImage:doc.courseImage,
-                    request: {
-                        type: 'GET',
-                        url: 'http://localhost:3000/courses/' + doc._id
-                    }
+                    courseImage: process.env.APIPoint + doc.courseImage
                 }
             })
         }  
@@ -28,6 +25,7 @@ exports.courses_get_all = (req, res, next) => {
         console.log(err);
         res.status(500).json({
           error: err,
+          status: false
         });
       });
     }
@@ -45,6 +43,7 @@ exports.courses_create_course = (req, res, next) => {
         console.log(result);
         res.status(201).json({
             message: "Created Course Successfully",
+            status: true,
             createdcourse: {
                 Name:result.Name,
                 Price:result.Price,
@@ -58,8 +57,9 @@ exports.courses_create_course = (req, res, next) => {
         })
         .catch((err) => {
         console.log(err);
-        res.status(500).json({
+        res.status(200).json({
             error: err,
+            status: false
         });
         });
     } 
@@ -73,7 +73,13 @@ exports.course_get_id = (req, res, next) => {
         console.log(doc);
         if (doc) {
             res.status(200).json({
-                course: doc,
+                course: {
+                    Name:doc.Name,
+                    Price:doc.Price,
+                    _id:doc._id,
+                    courseImage:process.env.APIPoint + doc.courseImage
+                },
+                status: true,
                 request: {
                     type: 'GET',
                     url: 'http://localhost:3000/courses'
@@ -81,7 +87,8 @@ exports.course_get_id = (req, res, next) => {
             });
         } else {
             res.status(404).json({
-            message: "No valid entry found for provided ID",
+                message: "No valid entry found for provided ID",
+                status: false
             });
         }
         })
@@ -89,34 +96,60 @@ exports.course_get_id = (req, res, next) => {
         console.log(err);
         res.status(500).json({
             error: err,
+            status: false
         });
         });
     }
 
 exports.courses_update_course = (req, res, next) => {
-    const id = req.params.CourseId;
-    const updateOps = {};
-    for (const ops of req.body) {
-        updateOps[ops.propName] = ops.value;
-    }
-    Course.update({ _id: id},{$set: updateOps})
-    .exec()
-    .then(result => {
-        console.log(result);
-        res.status(200).json({
-            message: 'Course Updated',
-            request: {
-                type:'GET',
-                url: 'http://localhost:3000/courses/' + id
-            } 
+    const id = req.body.CouresId;
+    const actioncall = req.body.action;
+    Course.findById(id)
+        .select("Name Price _id courseImage")
+        .exec()
+        .then((doc) => {
+            let updateOps;
+            if(actioncall == 'image') {
+                updateOps = {
+                    Name: req.body.Name,
+                    Price: req.body.Price,
+                    courseImage: req.file.path
+                };
+            } else if(actioncall == 'notimage'){
+                updateOps = {
+                    Name: req.body.Name,
+                    Price: req.body.Price,
+                    courseImage: doc.courseImage
+                };
+            }
+            Course.update({ _id: id},{$set: updateOps})
+            .exec()
+            .then(result => {
+                console.log(result);
+                res.status(200).json({
+                    message: 'Course Updated',
+                    status: true,
+                    request: {
+                        type:'GET',
+                        url: 'http://localhost:3000/courses/' + id
+                    } 
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error:err,
+                    status: false
+                });
+            });
+            
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error:err,
+                status: false
+            });
         });
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-        error:err
-        });
-    });
     } 
 
 exports.courses_remove_course = (req, res, next) => {
@@ -126,17 +159,19 @@ exports.courses_remove_course = (req, res, next) => {
         .then(result => {
         res.status(200).json({
             message: 'Course Deleted',
+            status: true,
             request: {
-            type: 'POST',
-            url:'http://localhost:3000/courses',
-            body: { name:'String', price:'Number' }
+                type: 'POST',
+                url:'http://localhost:3000/courses',
+                body: { name:'String', price:'Number' }
             }   
             });
         })
         .catch(err => {
         console.log(err);
         res.status(500).json({
-            error: err
+            error: err,
+            status: false
         });
         });
     }    

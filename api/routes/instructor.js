@@ -3,11 +3,11 @@ const router = express.Router();
 const checkAuth = require('../middleware/check-auth');
 const InstructorController = require('../controllers/instructor');
 
-router.get('/', checkAuth, InstructorController.instructors_get_all);
+router.get('/', InstructorController.instructors_get_all);
+
+router.get('/:InstructorId', InstructorController.instructor_get_id);
 
 router.post('/', checkAuth, InstructorController.instructors_create_instructor);
-
-router.get('/:InstructorId', checkAuth, InstructorController.instructor_get_id);
 
 router.patch('/:InstructorId', checkAuth, InstructorController.instructors_update_instructor);
 

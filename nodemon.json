@@ -1,6 +1,9 @@
 {
     "env" : {
-            "MONGO_ATLAS_PWD": "Cluster0",
-            "JWT_KEY": "MEAN"
+            "MONGO_ATLAS_PWD": "XXXX",
+            "JWT_KEY": "XXXX",
+            "email":"XXXXXXXX",
+            "password":"XXXXX",
+            "APIPoint": "http://XXXX:3000/"
     }
 }

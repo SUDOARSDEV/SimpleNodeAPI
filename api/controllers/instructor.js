@@ -6,27 +6,26 @@ const Course = require('../models/Course');
 exports.instructors_get_all = (req, res, next) => {
     Instructor.find()
         .select('Name CourseId _id')
-        .populate('CourseId','Name')
+        .populate('CourseId','Name courseImage')
         .exec()
         .then(docs => {
+            console.log(docs);
             res.status(200).json({
                 count: docs.length,
+                status : true,
                 instructor:docs.map(doc => {
                     return {
                         _id: doc._id,
                         Name: doc.Name,
-                        CourseId: doc.CourseId,
-                        request: {
-                            type: "GET",
-                            url: 'http://localhost:3000/instructor/' + doc._id
-                        }
+                        CourseId: doc.CourseId
                     }
                 })
             });
         })
         .catch(err => {
             res.status(500).json({
-                error: err
+                error: err,
+                status: false
             });
         });
 }
@@ -45,6 +44,7 @@ exports.instructors_create_instructor = (req, res, next) => {
                 console.log(result);
                 res.status(201).json({
                     message: 'Instructor Add',
+                    status: true,
                     createdInstructor: {
                         _id: result._id,
                         Name: result.Name,
@@ -59,7 +59,8 @@ exports.instructors_create_instructor = (req, res, next) => {
             .catch(err => {
                 console.log(err);
                 res.status(500).json({
-                    error: err
+                    error: err,
+                    status: false
                 });
             });
     })
@@ -84,11 +85,13 @@ exports.instructor_get_id = (req, res, next) => {
                 request: {
                     type: 'GET',
                     url: 'http://localhost:3000/instructor'
-                }
+                },
+                status: true
             });
         } else {
             res.status(404).json({
             message: "No valid entry found for provided ID",
+            status: false
             });
         }
         })
@@ -112,6 +115,7 @@ exports.instructors_update_instructor = (req, res, next) => {
         console.log(result);
         res.status(200).json({
             message: 'Instructor Updated',
+            status: true,
             request: {
                 type:'GET',
                 url: 'http://localhost:3000/instructor/' + id
@@ -121,7 +125,8 @@ exports.instructors_update_instructor = (req, res, next) => {
     .catch(err => {
         console.log(err);
         res.status(500).json({
-        error:err
+        error:err,
+        status: false
         });
     });
 }
@@ -132,6 +137,7 @@ exports.instructors_remove_instructor = (req, res, next) => {
     .then(result => {
         res.status(200).json({
             message: 'Instructor deleted',
+            status: true,
             request: {
                 type:'GET',
                 url:'http:localhost:3000/courses',
@@ -141,7 +147,8 @@ exports.instructors_remove_instructor = (req, res, next) => {
     })
     .catch(err => {
         res.status(500).json({
-            error: err
+            error: err,
+            status: false
         });
     });
 }

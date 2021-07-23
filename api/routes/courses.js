@@ -26,13 +26,13 @@ const upload = multer({storage: storage, limits: {
         fileFilter: fileFilter
 });
 
-router.get("/", checkAuth, CourseController.courses_get_all);
+router.get("/", CourseController.courses_get_all);
+
+router.get("/:CourseId", CourseController.course_get_id);
 
 router.post("/", checkAuth, upload.single('courseImage'), CourseController.courses_create_course);
-
-router.get("/:CourseId", checkAuth, CourseController.course_get_id);
     
-router.patch("/:CourseId", checkAuth, CourseController.courses_update_course);
+router.post("/update", checkAuth, upload.single('courseImage'), CourseController.courses_update_course);
     
 router.delete("/:CourseId", checkAuth, CourseController.courses_remove_course);
 

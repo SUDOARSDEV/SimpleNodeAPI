@@ -31,9 +31,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/courses', CoursesRoutes);
-app.use('/instructor', InstructorRoutes);
-app.use('/users', UserRoutes);
+app.use('/courses',cors() ,CoursesRoutes);
+app.use('/instructor', cors() ,InstructorRoutes);
+app.use('/users', cors() ,UserRoutes);
 
 
 app.use((req, res, next) => {
@@ -47,7 +47,8 @@ app.use((error, req, res, next) => {
     res.json({
         error: {
             message: error.message
-        }
+        },
+        status: false
     });
 });
 
