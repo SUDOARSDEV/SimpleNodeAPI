@@ -168,7 +168,6 @@ exports.user_email = (req, res, next) => {
      .exec()
      .then(user => {
         const userid = user[0]['_id'];
-        // console.log(user[0]['_id']);
         const mailOptions = {
             from: process.env.email,
             to: useremail+','+process.env.email,
